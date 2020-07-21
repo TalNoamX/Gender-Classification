@@ -17,37 +17,37 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 
 ###functions###
-def load_model(path_for_model, name_for_model):
-    sess = tf.Session()
-    # First let's load meta graph and restore weights
-    saver = tf.train.import_meta_graph(
-        path_for_model + name_for_model)
-    saver.restore(sess,
-                  tf.train.latest_checkpoint(path_for_model))
+# def load_model(path_for_model, name_for_model):
+#     sess = tf.Session()
+#     # First let's load meta graph and restore weights
+#     saver = tf.train.import_meta_graph(
+#         path_for_model + name_for_model)
+#     saver.restore(sess,
+#                   tf.train.latest_checkpoint(path_for_model))
+#
+#     graph = tf.get_default_graph()
+#     W = graph.get_tensor_by_name("Ws:0")
+#     b = graph.get_tensor_by_name("bs:0")
+#     x = graph.get_tensor_by_name("xs:0")
+#     y_ = graph.get_tensor_by_name("y_s:0")
+#     loss = graph.get_tensor_by_name("loss_func:0")
+#     return (sess, W, b, x, y_, loss)
 
-    graph = tf.get_default_graph()
-    W = graph.get_tensor_by_name("Ws:0")
-    b = graph.get_tensor_by_name("bs:0")
-    x = graph.get_tensor_by_name("xs:0")
-    y_ = graph.get_tensor_by_name("y_s:0")
-    loss = graph.get_tensor_by_name("loss_func:0")
-    return (sess, W, b, x, y_, loss)
 
+def read_images(path_for_women_folder, path_for_men_folder):
+    women_folder = path_for_women_folder
+    men_folder = path_for_men_folder
+    women_image_list = []
+    men_image_list = []
 
-def read_images(path_for_cat_folder, path_for_dog_folder):
-    cat_folder = path_for_cat_folder
-    dog_folder = path_for_dog_folder
-    cat_image_list = []
-    dog_image_list = []
-
-    for filename in glob.glob(cat_folder):
+    for filename in glob.glob(women_folder):
         im = Image.open(filename)
-        cat_image_list.append(np.reshape(im, (50 * 50)) / 255.)
+        women_image_list.append(np.reshape(im, (50 * 50)) / 255.)
 
-    for filename in glob.glob(dog_folder):
+    for filename in glob.glob(men_folder):
         im = Image.open(filename)
-        dog_image_list.append(np.reshape(im, (50 * 50)) / 255.)
-    return (cat_image_list, dog_image_list)
+        men_image_list.append(np.reshape(im, (50 * 50)) / 255.)
+    return (women_image_list, men_image_list)
 
 
 def shuffle_images(tuple_of_both_images_sets):
@@ -64,8 +64,8 @@ def shuffle_images(tuple_of_both_images_sets):
     return train_set_data_tuples
 
 
-def prepare_data(path_for_cat_folder, path_for_dog_folder):
-    tuple_of_both_images_sets = read_images(path_for_cat_folder, path_for_dog_folder)
+def prepare_data(path_for_women_folder, path_for_men_folder):
+    tuple_of_both_images_sets = read_images(path_for_women_folder, path_for_men_folder)
     shuffled_tupels_of_all_data = shuffle_images(tuple_of_both_images_sets)
     train_data_x = []
     train_data_y = []
@@ -82,8 +82,8 @@ def prepare_data(path_for_cat_folder, path_for_dog_folder):
 
 def suffle_wo_reafing(tuple_of_both_images_sets):
     shuffled_tupels_of_all_data = shuffle_images(tuple_of_both_images_sets)
-    train_data_x = []
-    train_data_y = []
+    train_data_x = list()
+    train_data_y = list()
     for tuple_of_image_class in shuffled_tupels_of_all_data:
         train_data_x.append(tuple_of_image_class[0])
 
@@ -98,17 +98,18 @@ def suffle_wo_reafing(tuple_of_both_images_sets):
 ###main###
 def main():
     # PLEASE NOTICE that again - this path is on MY computer - should be changed
-    path_for_cat_folder = r'C:\Users\evgen\Desktop\proj1_DL\dataset\trainset\cat\*.jpg'
-    path_for_dog_folder = r'C:\Users\evgen\Desktop\proj1_DL\dataset\trainset\dog\*.jpg'
-    path_to_save_model = r"C:\Users\evgen\Desktop\proj1_DL\dataset\models\LR\Adam\100k\model.ckpt"
+    path_for_women_folder = r'C:\Users\user1\PycharmProjects\gender-classification-1\Dataset\grey-Validation\Female\*.jpg'
+    path_for_men_folder = r'C:\Users\user1\PycharmProjects\gender-classification-1\Dataset\grey-Validation\Male\*.jpg'
+    path_to_save_model = r"C:\Users\user1\PycharmProjects\gender-classification-1\results\LR-results\model.ckpt"
     # var to represent num of epochs
-    num_of_epochs = 100000
+    num_of_epochs = 10000
     # hyper-parameter, learning rate
     learning_rate = 0.0001
     # our images are outputted as a-(100X100) vector so this is number of features - every pixels is a feature
     features = 2500
     # declaring epsilon for escaping of numerical problems in loss function
     eps = 1e-12
+    tf.compat.v1.disable_eager_execution()
     # creating a matrix [mX10,000] for x's from train data set
     x = tf.compat.v1.placeholder(tf.float32, [None, features], name="xs")
     # creating a vertical vector [mX1] for y's from train data set
@@ -125,7 +126,7 @@ def main():
     # update algorithm
     update = tf.compat.v1.train.AdamOptimizer(learning_rate).minimize(loss)
     # preparing data from given path for the learning
-    tuple_of_both_images_sets = read_images(path_for_cat_folder, path_for_dog_folder)
+    tuple_of_both_images_sets = read_images(path_for_women_folder, path_for_men_folder)
     trainset_data_tupels = suffle_wo_reafing(tuple_of_both_images_sets)
     data_x = np.asarray(trainset_data_tupels[0])
     data_y = np.asarray(trainset_data_tupels[1])
