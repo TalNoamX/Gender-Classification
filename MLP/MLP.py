@@ -16,8 +16,8 @@ os.environ['TF_ENABLE_WINOGRAD_NONFUSED'] = '1'
 
 def main():
     ###predeclared parameters for the learning
-    batch_size = 64
-    epochs = 50
+    batch_size = 75
+    epochs = 75
     IMG_HEIGHT = 50
     IMG_WIDTH = 50
     ###all data sets will use as train set, validation set and test set
@@ -40,6 +40,8 @@ def main():
     ###building the model
     model = Sequential([
         Flatten(),
+        Dense(2500, activation=None),
+        Dense(512, activation=None),
         Dense(1, activation='sigmoid')
 
     ])
@@ -49,7 +51,7 @@ def main():
                   metrics=['accuracy'])
     history = model.fit_generator(
         train_data_gen,
-        steps_per_epoch=6003 // batch_size,
+        steps_per_epoch=6500 // batch_size,
         epochs=epochs,
         validation_data=val_data_gen,
         validation_steps=2001 // batch_size
@@ -59,9 +61,9 @@ def main():
     print('\nhistory dict:', history.history)
     ###saving the model and weights as a json and h5 files
     json_str = model.to_json()
-    with open(r'C:\Users\user1\PycharmProjects\gender-classification-1\LR\results\LR_model.json', 'w') as outfile:
+    with open(r'C:\Users\user1\PycharmProjects\gender-classification-1\MLP\results\MLP_model.json', 'w') as outfile:
         json.dump(json.loads(json_str), outfile, indent=4)  # Save the json on a file
-        model.save_weights(r"C:\Users\user1\PycharmProjects\gender-classification-1\LR\results\weights_LR_model.h5", save_format="h5")
+        model.save_weights(r"C:\Users\user1\PycharmProjects\gender-classification-1\MLP\results\weights_MLP_model.h5", save_format="h5")
     print("Saved model to disk")
     ###evaluating the model on the test data
     print('\n# Evaluate on test data')

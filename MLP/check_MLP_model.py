@@ -2,7 +2,7 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import json
 import tensorflow as tf
 
-batch_size = 64
+batch_size = 75
 IMG_HEIGHT = 50
 IMG_WIDTH = 50
 test_image_generator = ImageDataGenerator(rescale=1. / 255)
@@ -12,11 +12,11 @@ test_data_gen = test_image_generator.flow_from_directory(batch_size=batch_size,
                                                          class_mode='binary')
 
 with open(
-        r"C:\Users\user1\PycharmProjects\gender-classification-1\LR\results\LR_model.json") as json_file:
+        r"C:\Users\user1\PycharmProjects\gender-classification-1\MLP\results\MLP_model.json") as json_file:
     data = json.load(json_file)
     data = json.dumps(data)
     model = tf.keras.models.model_from_json(data)
-model.load_weights(r"C:\Users\user1\PycharmProjects\gender-classification-1\LR\results\weights_LR_model.h5")
+model.load_weights(r"C:\Users\user1\PycharmProjects\gender-classification-1\MLP\results\weights_MLP_model.h5")
 model.compile(optimizer='adam',
               loss='binary_crossentropy',
               metrics=['accuracy', 'Precision', 'Recall'])
