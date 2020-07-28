@@ -1,9 +1,10 @@
-from tensorflow.keras import Sequential
-from tensorflow.keras.layers import Dense, Flatten
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import json
 import os
+import sys
 import matplotlib.pyplot as plt
+from tensorflow.keras import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 os.environ["OMP_NUM_THREADS"] = "NUM_PARALLEL_EXEC_UNITS"
 os.environ["KMP_BLOCKTIME"] = "30"
@@ -13,64 +14,86 @@ os.environ['TF_ENABLE_WINOGRAD_NONFUSED'] = '1'
 
 
 def data(batch_size, img_height, img_width):
-    train_image_generator = ImageDataGenerator(rescale=1. / 255)
+    train_image_generator = ImageDataGenerator(
+        rescale=1. / 255,
+        rotation_range=45,
+        width_shift_range=.15,
+        height_shift_range=.15,
+        horizontal_flip=True,
+        zoom_range=0.5
+    )
     validation_image_generator = ImageDataGenerator(rescale=1. / 255)
     test_image_generator = ImageDataGenerator(rescale=1. / 255)
     train_set = train_image_generator.flow_from_directory(batch_size=batch_size,
-                                                          directory=r"C:\Users\user1\PycharmProjects\gender-classification-1\Dataset\grey-Train",
+                                                          directory=r"C:\Users\user1\PycharmProjects\gender-classification-1\Dataset\Train",
                                                           shuffle=True,
                                                           target_size=(img_height, img_width),
                                                           class_mode='binary')
     valid_set = validation_image_generator.flow_from_directory(batch_size=batch_size,
-                                                               directory=r"C:\Users\user1\PycharmProjects\gender-classification-1\Dataset\grey-Validation",
+                                                               directory=r"C:\Users\user1\PycharmProjects\gender-classification-1\Dataset\Validation",
                                                                target_size=(img_height, img_width),
                                                                class_mode='binary')
     test_set = test_image_generator.flow_from_directory(batch_size=batch_size,
-                                                        directory=r"C:\Users\user1\PycharmProjects\gender-classification-1\Dataset\grey-Test",
+                                                        directory=r"C:\Users\user1\PycharmProjects\gender-classification-1\Dataset\Test",
                                                         target_size=(img_height, img_width),
                                                         class_mode='binary')
     print("Load data successfully!~")
     return train_set, test_set, valid_set
 
 
-def main():
-    batch_size = 54
-    epochs = 100
-    img_height = 50
-    img_width = 50
-    train_set, test_set, valid_set = data(batch_size, img_height, img_width)
-
+def build_Model(img_height, img_width):
     model = Sequential([
+        Conv2D(16, 3, padding='same', activation='relu',
+               input_shape=(img_height, img_width, 3)),
+        MaxPooling2D(),
+        Dropout(0.2),
+        Conv2D(32, 3, padding='same', activation='relu'),
+        MaxPooling2D(),
+        Conv2D(64, 3, padding='same', activation='relu'),
+        MaxPooling2D(),
+        Conv2D(128, 3, padding='same', activation='relu'),
+        MaxPooling2D(),
+        Dropout(0.2),
         Flatten(),
-        Dense(2500, activation=None),
-        Dense(512, activation=None),
+        Dense(512, activation='relu'),
         Dense(1, activation='sigmoid')
-
     ])
     print("Built model successfully!~")
+    return model
+
+
+def main():
+    batch_size = 64
+    epochs = 250
+    img_height = 200
+    img_width = 200
+    train_set, test_set, valid_set = data(batch_size, img_height, img_width)
+    model = build_Model(img_height, img_width)
     model.compile(optimizer='adam',
                   loss='binary_crossentropy',
                   metrics=['accuracy'])
     history = model.fit_generator(
         train_set,
-        steps_per_epoch=5003 // batch_size,
+        steps_per_epoch=6003 // batch_size,
         epochs=epochs,
         validation_data=valid_set,
         validation_steps=2001 // batch_size
     )
 
-    #print('\nhistory dict:', history.history)
+    print('\nhistory dict:', history.history)
     json_str = model.to_json()
-    with open(r'C:\Users\user1\PycharmProjects\gender-classification-1\Multilayer Perceptron\models\MLP_model.json',
-              'w') as outfile:
+    with open(
+            r'C:\Users\user1\PycharmProjects\gender-classification-1\Convolutional neural network\model\CNN_model.json',
+            'w') as outfile:
         json.dump(json.loads(json_str), outfile, indent=4)
         model.save_weights(
-            r"C:\Users\user1\PycharmProjects\gender-classification-1\Multilayer Perceptron\models\weights_MLP_model.h5",
+            r"C:\Users\user1\PycharmProjects\gender-classification-1\Convolutional neural network\model\weights_CNN_model.h5",
             save_format="h5")
     print("Saved model to disk")
     print('\n# Evaluate on test data')
     results_test = model.evaluate_generator(test_set)
     print('test loss, test acc:', results_test)
+
     acc = history.history['accuracy']
     val_acc = history.history['val_accuracy']
     loss = history.history['loss']
@@ -91,4 +114,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())

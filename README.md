@@ -1,6 +1,6 @@
 # Gender-Classification
 Gender classification using 4 Machine Learning/Deep Learning techniques.
-CNN,
-MLP,
+Convolutional neural network (CNN),
+Multilayer Perceptron (MLP),
 Linear Regression,
-SVM.
+k-nearest neighbors (KNN).

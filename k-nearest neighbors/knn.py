@@ -2,7 +2,7 @@ import sys
 import glob
 import numpy as np
 import matplotlib.pyplot as plt
-from PIL import Image
+from PIL import Image as pilow
 from keras.preprocessing import image
 from sklearn.neighbors import KNeighborsClassifier as KNN_classifier
 from sklearn.model_selection import train_test_split as splitSet
@@ -22,7 +22,7 @@ def knn(train_x, train_y, test_x, test_y, valid_x, valid_y):
         if graph_y_value[counter] > accuracy:
             accuracy = graph_y_value[counter]
             best_k = k
-        print("Round: "+str(counter)+"   K is now: "+str(k)+"    best accuracy: " + str(accuracy))
+        print("Round: " + str(counter) + "   K is now: " + str(k) + "    best accuracy: " + str(accuracy))
         counter += 1
         graph_x_value.append(k)
 
@@ -35,24 +35,27 @@ def knn(train_x, train_y, test_x, test_y, valid_x, valid_y):
 
 
 def data_prep():
-    path_men = r"C:\Users\user1\PycharmProjects\gender-classification-1\Dataset\knn-train\Male" + r'\*.' + "jpg"
-    path_women = r"C:\Users\user1\PycharmProjects\gender-classification-1\Dataset\knn-train\Female" + r'\*.' + "jpg"
-    data_set = list()
-    for filename in glob.glob(path_men):
-        im = Image.open(filename)
-        im = im.resize((200, 200), Image.ANTIALIAS)
-        im = image.img_to_array(im)
-        im /= 255
-        data_set.append(im)
+    try:
+        path_men = r"C:\Users\user1\PycharmProjects\gender-classification-1\Dataset\knn-train\Male" + r'\*.' + "jpg"
+        path_women = r"C:\Users\user1\PycharmProjects\gender-classification-1\Dataset\knn-train\Female" + r'\*.' + "jpg"
+        data_set = list()
+        for filename in glob.glob(path_men):
+            im = pilow.open(filename)
+            im = im.resize((200, 200), pilow.ANTIALIAS)
+            im = image.img_to_array(im)
+            im /= 255
+            data_set.append(im)
 
-    for filename in glob.glob(path_women):
-        im = Image.open(filename)
-        im = im.resize((200, 200), Image.ANTIALIAS)
-        im = image.img_to_array(im)
-        im /= 255
-        data_set.append(im)
-    print("Loading dataset successfully!~ ")
-    return np.array(data_set)
+        for filename in glob.glob(path_women):
+            im = pilow.open(filename)
+            im = im.resize((200, 200), pilow.ANTIALIAS)
+            im = image.img_to_array(im)
+            im /= 255
+            data_set.append(im)
+        print("Loading dataset successfully!~ ")
+        return np.array(data_set)
+    except Exception as ex:
+        print(ex)
 
 
 def main():
