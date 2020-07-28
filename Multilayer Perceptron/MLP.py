@@ -1,9 +1,10 @@
+import json
+import sys
+import os
+import matplotlib.pyplot as plt
 from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Dense, Flatten
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-import json
-import os
-import matplotlib.pyplot as plt
 
 os.environ["OMP_NUM_THREADS"] = "NUM_PARALLEL_EXEC_UNITS"
 os.environ["KMP_BLOCKTIME"] = "30"
@@ -59,7 +60,6 @@ def main():
         validation_steps=2001 // batch_size
     )
 
-    #print('\nhistory dict:', history.history)
     json_str = model.to_json()
     with open(r'C:\Users\user1\PycharmProjects\gender-classification-1\Multilayer Perceptron\models\MLP_model.json',
               'w') as outfile:
@@ -91,4 +91,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())

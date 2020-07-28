@@ -1,11 +1,11 @@
+import json
+import sys
+import os
+import matplotlib.pyplot as plt
 from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Dense, Flatten
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-import json
-import os
-import matplotlib.pyplot as plt
 
-###compilation flags to make TF more efficient
 os.environ["OMP_NUM_THREADS"] = "NUM_PARALLEL_EXEC_UNITS"
 os.environ["KMP_BLOCKTIME"] = "30"
 os.environ["KMP_SETTINGS"] = "1"
@@ -13,61 +13,62 @@ os.environ["KMP_AFFINITY"] = "granularity=fine,verbose,compact,1,0"
 os.environ['TF_ENABLE_WINOGRAD_NONFUSED'] = '1'
 
 
+def data(batch_size, img_height, img_width):
+    train_image_generator = ImageDataGenerator(rescale=1. / 255)
+    validation_image_generator = ImageDataGenerator(rescale=1. / 255)
+    test_image_generator = ImageDataGenerator(rescale=1. / 255)
+    train_set = train_image_generator.flow_from_directory(batch_size=batch_size,
+                                                          directory=r"C:\Users\user1\PycharmProjects\gender-classification-1\Dataset\grey-Train",
+                                                          shuffle=True,
+                                                          target_size=(img_height, img_width),
+                                                          class_mode='binary')
+    valid_set = validation_image_generator.flow_from_directory(batch_size=batch_size,
+                                                               directory=r"C:\Users\user1\PycharmProjects\gender-classification-1\Dataset\grey-Validation",
+                                                               target_size=(img_height, img_width),
+                                                               class_mode='binary')
+    test_set = test_image_generator.flow_from_directory(batch_size=batch_size,
+                                                        directory=r"C:\Users\user1\PycharmProjects\gender-classification-1\Dataset\grey-Test",
+                                                        target_size=(img_height, img_width),
+                                                        class_mode='binary')
+    print("Load data successfully!~")
+    return train_set, test_set, valid_set
+
 
 def main():
-    ###predeclared parameters for the learning
-    batch_size = 64
-    epochs = 50
-    IMG_HEIGHT = 50
-    IMG_WIDTH = 50
-    ###all data sets will use as train set, validation set and test set
-    train_image_generator = ImageDataGenerator(rescale=1. / 255)  # Generator for our training data
-    validation_image_generator = ImageDataGenerator(rescale=1. / 255)  # Generator for our validation data
-    test_image_generator = ImageDataGenerator(rescale=1. / 255)
-    train_data_gen = train_image_generator.flow_from_directory(batch_size=batch_size,
-                                                               directory=r"C:\Users\user1\PycharmProjects\gender-classification-1\Dataset\grey-Train",
-                                                               shuffle=True,
-                                                               target_size=(IMG_HEIGHT, IMG_WIDTH),
-                                                               class_mode='binary')
-    val_data_gen = validation_image_generator.flow_from_directory(batch_size=batch_size,
-                                                                  directory=r"C:\Users\user1\PycharmProjects\gender-classification-1\Dataset\grey-Validation",
-                                                                  target_size=(IMG_HEIGHT, IMG_WIDTH),
-                                                                  class_mode='binary')
-    test_data_gen = test_image_generator.flow_from_directory(batch_size=batch_size,
-                                                             directory=r"C:\Users\user1\PycharmProjects\gender-classification-1\Dataset\grey-Test",
-                                                             target_size=(IMG_HEIGHT, IMG_WIDTH),
-                                                             class_mode='binary')
-    ###building the model
+    batch_size = 54
+    epochs = 100
+    img_height = 50
+    img_width = 50
+    train_set, test_set, valid_set = data(batch_size, img_height, img_width)
+
     model = Sequential([
         Flatten(),
         Dense(1, activation='sigmoid')
 
     ])
-    ###complinig the model
     model.compile(optimizer='adam',
                   loss='binary_crossentropy',
                   metrics=['accuracy'])
     history = model.fit_generator(
-        train_data_gen,
-        steps_per_epoch=6003 // batch_size,
+        train_set,
+        steps_per_epoch=5003 // batch_size,
         epochs=epochs,
-        validation_data=val_data_gen,
+        validation_data=valid_set,
         validation_steps=2001 // batch_size
     )
 
-    ###summary of the model after traning
     print('\nhistory dict:', history.history)
-    ###saving the model and weights as a json and h5 files
     json_str = model.to_json()
-    with open(r'C:\Users\user1\PycharmProjects\gender-classification-1\LR\results\LR_model.json', 'w') as outfile:
-        json.dump(json.loads(json_str), outfile, indent=4)  # Save the json on a file
-        model.save_weights(r"C:\Users\user1\PycharmProjects\gender-classification-1\LR\results\weights_LR_model.h5", save_format="h5")
+    with open(r'C:\Users\user1\PycharmProjects\gender-classification-1\Logistic Regression\models\LR_model.json',
+              'w') as outfile:
+        json.dump(json.loads(json_str), outfile, indent=4)
+        model.save_weights(
+            r"C:\Users\user1\PycharmProjects\gender-classification-1\Logistic Regression\models\weights_LR_model.h5",
+            save_format="h5")
     print("Saved model to disk")
-    ###evaluating the model on the test data
     print('\n# Evaluate on test data')
-    results_test = model.evaluate_generator(test_data_gen)
+    results_test = model.evaluate_generator(test_set)
     print('test loss, test acc:', results_test)
-    ####printing the model as a graph
     acc = history.history['accuracy']
     val_acc = history.history['val_accuracy']
     loss = history.history['loss']
@@ -88,4 +89,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())
