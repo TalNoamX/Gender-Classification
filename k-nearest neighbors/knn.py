@@ -22,7 +22,7 @@ def knn(train_x, train_y, test_x, test_y, valid_x, valid_y):
         if graph_y_value[counter] > accuracy:
             accuracy = graph_y_value[counter]
             best_k = k
-        print("Round: " + str(counter) + "   K is now: " + str(k) + "    best accuracy: " + str(accuracy))
+        print("Round: " + str(counter) + "   K is now: " + str(k) + "    accuracy: " + str(graph_y_value[counter]))
         counter += 1
         graph_x_value.append(k)
 
@@ -30,7 +30,9 @@ def knn(train_x, train_y, test_x, test_y, valid_x, valid_y):
     model = KNN_classifier(n_neighbors=best_k + 1)
     model.fit(train_x, train_y)
     print("Test Accuracy: " + str(model.score(test_x, test_y)))
-    plt.plot(graph_x_value, graph_y_value)
+    plt.plot(graph_x_value, graph_y_value, label='Validation Accuracy')
+    plt.legend(loc='lower left')
+    plt.title('KNN Model')
     plt.show()
 
 
@@ -41,14 +43,14 @@ def data_prep():
         data_set = list()
         for filename in glob.glob(path_men):
             im = pilow.open(filename).convert('L')
-            im = im.resize((200, 200), pilow.ANTIALIAS)
+            im = im.resize((50, 50), pilow.ANTIALIAS)
             im = image.img_to_array(im)
             im /= 255
             data_set.append(im)
 
         for filename in glob.glob(path_women):
             im = pilow.open(filename).convert('L')
-            im = im.resize((200, 200), pilow.ANTIALIAS)
+            im = im.resize((50, 50), pilow.ANTIALIAS)
             im = image.img_to_array(im)
             im /= 255
             data_set.append(im)

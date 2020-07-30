@@ -43,8 +43,9 @@ def main():
 
     model = Sequential([
         Flatten(),
-        Dense(2500, activation=None),
-        Dense(512, activation=None),
+        Dense(1250, activation='sigmoid'),
+        Dense(512, activation='sigmoid'),
+        Dense(10, activation='sigmoid'),
         Dense(1, activation='sigmoid')
 
     ])

@@ -1,3 +1,4 @@
+import sys
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import json
 import tensorflow as tf
@@ -8,7 +9,7 @@ def main():
     img_height, img_width = 200, 200
     test_image_generator = ImageDataGenerator(rescale=1. / 255)
     test_data_gen = test_image_generator.flow_from_directory(batch_size=batch_size,
-                                                             directory=r"C:\Users\user1\PycharmProjects\gender-classification-1\Dataset\Test",
+                                                             directory=r"C:\Users\user1\PycharmProjects\gender-classification-1\Dataset\Test_200",
                                                              target_size=(img_height, img_width),
                                                              class_mode='binary')
 
@@ -23,8 +24,11 @@ def main():
                   loss='binary_crossentropy',
                   metrics=['accuracy', 'Precision', 'Recall'])
     results_test = model.evaluate_generator(test_data_gen)
-    print('test loss:' + results_test[0] + '   test accurecy' + results_test[1])
+    print('test loss:' + str(results_test[0]) + '   test accurecy' + str(results_test[1]))
     precision = results_test[2]
     recall = results_test[3]
     f_measure = 2 * (precision * recall) / (precision + recall)
-    print("F-Measure: ", f_measure)
+    print("F-Measure: ", str(f_measure))
+
+if __name__ == '__main__':
+    sys.exit(main())

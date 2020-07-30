@@ -64,7 +64,7 @@ def build_Model(img_height, img_width):
 
 def main():
     batch_size = 64
-    epochs = 250
+    epochs = 100
     img_height = 200
     img_width = 200
     train_set, test_set, valid_set = data(batch_size, img_height, img_width)
