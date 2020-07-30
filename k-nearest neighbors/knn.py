@@ -15,7 +15,7 @@ def knn(train_x, train_y, test_x, test_y, valid_x, valid_y):
     accuracy = 0
     counter = 0
     print("Start the knn algorithm!~")
-    for k in range(1, 500, 2):
+    for k in range(1, 100, 2):
         model = KNN_classifier(n_neighbors=k)
         model.fit(train_x, train_y)
         graph_y_value.append(model.score(valid_x, valid_y))
@@ -26,7 +26,7 @@ def knn(train_x, train_y, test_x, test_y, valid_x, valid_y):
         counter += 1
         graph_x_value.append(k)
 
-    print("max acc at k=" + str(best_k) + " acc of " + str(accuracy))
+    print("Final K = " + str(best_k) + " accuracy = " + str(accuracy))
     model = KNN_classifier(n_neighbors=best_k + 1)
     model.fit(train_x, train_y)
     print("Test Accuracy: " + str(model.score(test_x, test_y)))
@@ -40,14 +40,14 @@ def data_prep():
         path_women = r"C:\Users\user1\PycharmProjects\gender-classification-1\Dataset\knn-train\Female" + r'\*.' + "jpg"
         data_set = list()
         for filename in glob.glob(path_men):
-            im = pilow.open(filename)
+            im = pilow.open(filename).convert('L')
             im = im.resize((200, 200), pilow.ANTIALIAS)
             im = image.img_to_array(im)
             im /= 255
             data_set.append(im)
 
         for filename in glob.glob(path_women):
-            im = pilow.open(filename)
+            im = pilow.open(filename).convert('L')
             im = im.resize((200, 200), pilow.ANTIALIAS)
             im = image.img_to_array(im)
             im /= 255
@@ -63,8 +63,8 @@ def main():
     men_y = np.zeros(2000)
     woman_y = np.ones(2000)
     y = np.concatenate((men_y, woman_y), axis=0)
-    train_x, test_x, train_y, test_y = splitSet(data, y, random_state=35, test_size=0.25)
-    valid_x, test_x, valid_y, test_y = splitSet(test_x, test_y, random_state=35, test_size=0.5)
+    train_x, test_x, train_y, test_y = splitSet(data, y, random_state=42, test_size=0.2)
+    valid_x, test_x, valid_y, test_y = splitSet(test_x, test_y, random_state=42, test_size=0.5)
     print("Setting up arguments..")
     train_x = train_x[list(range(train_x.shape[0]))]
     train_y = train_y[list(range(train_x.shape[0]))]

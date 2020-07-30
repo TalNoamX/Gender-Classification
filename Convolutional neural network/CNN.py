@@ -25,16 +25,16 @@ def data(batch_size, img_height, img_width):
     validation_image_generator = ImageDataGenerator(rescale=1. / 255)
     test_image_generator = ImageDataGenerator(rescale=1. / 255)
     train_set = train_image_generator.flow_from_directory(batch_size=batch_size,
-                                                          directory=r"C:\Users\user1\PycharmProjects\gender-classification-1\Dataset\Train",
+                                                          directory=r"C:\Users\user1\PycharmProjects\gender-classification-1\Dataset\Train_200",
                                                           shuffle=True,
                                                           target_size=(img_height, img_width),
                                                           class_mode='binary')
     valid_set = validation_image_generator.flow_from_directory(batch_size=batch_size,
-                                                               directory=r"C:\Users\user1\PycharmProjects\gender-classification-1\Dataset\Validation",
+                                                               directory=r"C:\Users\user1\PycharmProjects\gender-classification-1\Dataset\Validation_200",
                                                                target_size=(img_height, img_width),
                                                                class_mode='binary')
     test_set = test_image_generator.flow_from_directory(batch_size=batch_size,
-                                                        directory=r"C:\Users\user1\PycharmProjects\gender-classification-1\Dataset\Test",
+                                                        directory=r"C:\Users\user1\PycharmProjects\gender-classification-1\Dataset\Test_200",
                                                         target_size=(img_height, img_width),
                                                         class_mode='binary')
     print("Load data successfully!~")

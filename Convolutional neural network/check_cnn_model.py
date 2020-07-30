@@ -23,10 +23,8 @@ def main():
                   loss='binary_crossentropy',
                   metrics=['accuracy', 'Precision', 'Recall'])
     results_test = model.evaluate_generator(test_data_gen)
-    print('test loss, test acc:, Precision:, Recall', results_test)
-    acc = results_test[1]
+    print('test loss:' + results_test[0] + '   test accurecy' + results_test[1])
     precision = results_test[2]
     recall = results_test[3]
     f_measure = 2 * (precision * recall) / (precision + recall)
-    print("acc: ", acc)
     print("F-Measure: ", f_measure)

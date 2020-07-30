@@ -68,7 +68,7 @@ def main():
     print("Saved model to disk")
     print('\n# Evaluate on test data')
     results_test = model.evaluate_generator(test_set)
-    print('test loss, test acc:', results_test)
+    print('Test loss, test accuracy:', results_test)
     acc = history.history['accuracy']
     val_acc = history.history['val_accuracy']
     loss = history.history['loss']
