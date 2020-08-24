@@ -18,10 +18,10 @@ I tried to build my models as accurate as possible, to properly classify men and
 
 **Dataset:**
 
-![](RackMultipart20200824-4-rv677m_html_77a55be30783fe3b.jpg) ![](RackMultipart20200824-4-rv677m_html_7d74b08533023c5b.jpg)T ![](RackMultipart20200824-4-rv677m_html_881faf1bb1e6b95d.jpg) ![](RackMultipart20200824-4-rv677m_html_52e2e286ad155e5d.jpg) his dataset I use was download from the Kaggle website. It contains more than 100k of images of female and male portraits, and already divided into 3 categories: train, test, and validation. For example:
+![](RackMultipart20200824-4-rv677m_html_77a55be30783fe3b.jpg) ![](RackMultipart20200824-4-rv677m_html_7d74b08533023c5b.jpg)![](RackMultipart20200824-4-rv677m_html_881faf1bb1e6b95d.jpg) ![](RackMultipart20200824-4-rv677m_html_52e2e286ad155e5d.jpg) This dataset I use was download from the Kaggle website. It contains more than 100k of images of female and male portraits, and already divided into 3 categories: train, test, and validation. For example:
 
-T ![](RackMultipart20200824-4-rv677m_html_aec6346c55b7bec8.jpg)
- ![](RackMultipart20200824-4-rv677m_html_a0db8575d1ddd4a2.jpg) he images for the logistic regression, and MLP models, I turned grayscale and size 50x50, the reason is that the models are not complex enough for the RGB color system. Example:
+![](RackMultipart20200824-4-rv677m_html_aec6346c55b7bec8.jpg)
+ ![](RackMultipart20200824-4-rv677m_html_a0db8575d1ddd4a2.jpg) The images for the logistic regression, and MLP models, I turned grayscale and size 50x50, the reason is that the models are not complex enough for the RGB color system. Example:
 
 For the KNN model, I also used grayscale images but because the model was simpler I kept the size 200x200.
 
