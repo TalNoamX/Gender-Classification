@@ -18,10 +18,12 @@ I tried to build my models as accurate as possible, to properly classify men and
 
 **Dataset:**
 
-![alt text](https://github.com/TalNoamX/Gender-Classification/blob/master/Image/1.jpg) ![alt text](https://github.com/TalNoamX/Gender-Classification/blob/master/Image/2.jpg)![alt text](https://github.com/TalNoamX/Gender-Classification/blob/master/Image/3.jpg) ![alt text](https://github.com/TalNoamX/Gender-Classification/blob/master/Image/4.jpg)This dataset I use was download from the Kaggle website. It contains more than 100k of images of female and male portraits, and already divided into 3 categories: train, test, and validation. For example:
+![alt text](https://github.com/TalNoamX/Gender-Classification/blob/master/Image/1.jpg) ![alt text](https://github.com/TalNoamX/Gender-Classification/blob/master/Image/2.jpg)![alt text](https://github.com/TalNoamX/Gender-Classification/blob/master/Image/3.jpg) ![alt text](https://github.com/TalNoamX/Gender-Classification/blob/master/Image/4.jpg)
+This dataset I use was download from the Kaggle website. It contains more than 100k of images of female and male portraits, and already divided into 3 categories: train, test, and validation. For example:
 
 ![alt text](https://github.com/TalNoamX/Gender-Classification/blob/master/Image/5.jpg)
- ![alt text](https://github.com/TalNoamX/Gender-Classification/blob/master/Image/6.jpg)The images for the logistic regression, and MLP models, I turned grayscale and size 50x50, the reason is that the models are not complex enough for the RGB color system. Example:
+ ![alt text](https://github.com/TalNoamX/Gender-Classification/blob/master/Image/6.jpg)\
+The images for the logistic regression, and MLP models, I turned grayscale and size 50x50, the reason is that the models are not complex enough for the RGB color system. Example:
 
 For the KNN model, I also used grayscale images but because the model was simpler I kept the size 200x200.
 
