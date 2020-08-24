@@ -18,10 +18,10 @@ I tried to build my models as accurate as possible, to properly classify men and
 
 **Dataset:**
 
-![alt text](RackMultipart20200824-4-rv677m_html_77a55be30783fe3b.jpg) ![alt text](RackMultipart20200824-4-rv677m_html_7d74b08533023c5b.jpg)![alt text](RackMultipart20200824-4-rv677m_html_881faf1bb1e6b95d.jpg) ![alt text](RackMultipart20200824-4-rv677m_html_52e2e286ad155e5d.jpg)This dataset I use was download from the Kaggle website. It contains more than 100k of images of female and male portraits, and already divided into 3 categories: train, test, and validation. For example:
+![alt text](https://github.com/TalNoamX/Gender-Classification/blob/master/Image/1.jpg) ![alt text](https://github.com/TalNoamX/Gender-Classification/blob/master/Image/2.jpg)![alt text](https://github.com/TalNoamX/Gender-Classification/blob/master/Image/3.jpg) ![alt text](https://github.com/TalNoamX/Gender-Classification/blob/master/Image/4.jpg)This dataset I use was download from the Kaggle website. It contains more than 100k of images of female and male portraits, and already divided into 3 categories: train, test, and validation. For example:
 
-![alt text](RackMultipart20200824-4-rv677m_html_aec6346c55b7bec8.jpg)
- ![alt text](RackMultipart20200824-4-rv677m_html_a0db8575d1ddd4a2.jpg)The images for the logistic regression, and MLP models, I turned grayscale and size 50x50, the reason is that the models are not complex enough for the RGB color system. Example:
+![alt text](https://github.com/TalNoamX/Gender-Classification/blob/master/Image/5.jpg)
+ ![alt text](https://github.com/TalNoamX/Gender-Classification/blob/master/Image/6.jpg)The images for the logistic regression, and MLP models, I turned grayscale and size 50x50, the reason is that the models are not complex enough for the RGB color system. Example:
 
 For the KNN model, I also used grayscale images but because the model was simpler I kept the size 200x200.
 
@@ -41,7 +41,7 @@ The algorithm runs from k = 1 to 99.
 
 **Here are the results:**
 
-![](RackMultipart20200824-4-rv677m_html_562dc09750e1da5c.png)Loading dataset successfully!~
+![alt text](Image/knn.jpg.png)Loading dataset successfully!~
 
 Setting up arguments...
 
@@ -101,7 +101,7 @@ With TensorFlow and keras I built the full model. I used the originally sigmoid 
 
 **Results** :
 
-![](RackMultipart20200824-4-rv677m_html_73b850551ec740b1.png)Epoch 100/100
+![alt text](Image/LR.png)Epoch 100/100
 
 1/92 [..............................] - ETA: 5s - loss: 0.3897 - accuracy: 0.8148
 
@@ -279,7 +279,7 @@ Epoch 100/100
 
 test loss: 0.24428823261487823 test accuracy: 0.9301793
 
-![](RackMultipart20200824-4-rv677m_html_803c0a256e22391a.png)
+![alt text](Image/MLP.png)
 
 as you can see the results look very much like the results from the logistic regression model, the prediction got better only by 2%.
 
@@ -291,7 +291,7 @@ A Convolutional Neural Network (ConvNet/CNN) is a Deep Learning algorithm that c
 
 This technique is much complex than the other so far, in this method, I used optimization techniques, adding noise to images, &quot;relu&quot; activation, a large number of layers, padding, and max-pooling.
 
-![](RackMultipart20200824-4-rv677m_html_9c0e6dbc10346714.png) **Architecture:**
+![alt text](Image/arch_CNN.png) **Architecture:**
 
 The data set for this method was colored images size 200x200.
 
@@ -393,7 +393,7 @@ Epoch 250/250
 
 test loss: 0.07626534784760546 test accuracy: 0.9716685
 
-![](RackMultipart20200824-4-rv677m_html_c03dffdbfb012777.png)
+![alt text](Image/CNN.png)
 
 **Personal notes:**
 
